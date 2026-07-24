@@ -1,1 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GENE SABALA</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap');
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #F7F5F0; color: #24211D; font-family: 'Inter', -apple-system, sans-serif; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 32px 24px 80px; }
+  h2 { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 22px; margin: 0; }
+  h3 { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 17px; margin: 0; }
+  .top-row { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 4px; }
+  .sub { font-size: 13px; color: #8A8578; margin: 0 0 16px; }
+  .btn { font-family: inherit; font-size: 13px; font-weight: 500; padding: 8px 14px; border-radius: 6px; border: 1px solid #D8D3C4; background: #FFFFFF; color: #24211D; cursor: pointer; }
+  .btn:hover { background: #EFEAE0; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-primary { background: #2E4057; color: #F7F5F0; border-color: #2E4057; }
+  .btn-primary:hover { background: #253347; }
+  .input, .textarea { font-family: 'Courier New', Courier, monospace; font-size: 12pt; border: 1px solid #D8D3C4; border-radius: 6px; padding: 8px 10px; background: #FFFFFF; color: #24211D; width: 100%; }
+  .input:focus, .textarea:focus { outline: none; border-color: #2E4057; }
+  .textarea { min-height: 140px; line-height: 1.6; resize: vertical; }
+  .label { font-size: 12px; color: #8A8578; display: block; margin-bottom: 4px; }
+  .name-field { max-width: 240px; margin-bottom: 16px; }
+  .error { font-size: 12px; color: #B54B3F; margin-bottom: 12px; }
+  .saved { font-size: 12px; color: #255C36; margin-bottom: 12px; }
+  .status { font-size: 11px; color: #8A8578; }
+  .status.live::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #3F7D4F; margin-right: 5px; }
+  .main-file { background: #FFFFFF; border: 1px solid #E3DFD3; border-radius: 8px; padding: 18px 20px; margin-bottom: 20px; }
+  .empty-msg { font-size: 13px; color: #8A8578; font-style: italic; margin: 0; }
+  .block { margin-bottom: 18px; }
+  .block:last-child { margin-bottom: 0; }
+  .block-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+  .section-tag { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: #8A8578; }
+  .author-chip { font-size: 11px; padding: 2px 8px; border-radius: 10px; }
+  .time-tag { font-size: 11px; color: #8A8578; }
+  .edit-btn { margin-left: auto; font-size: 11px; padding: 3px 9px; }
+  .block-text { white-space: pre-wrap; word-break: break-word; font-family: 'Courier New', Courier, monospace; font-size: 12pt; line-height: 1.7; margin: 0; padding: 10px 14px; background: #FBFAF7; }
+  .add-box, .edit-box { background: #FFFFFF; border: 1px solid #E3DFD3; border-radius: 8px; padding: 14px 16px; margin-bottom: 28px; }
+  .row-gap { display: flex; gap: 8px; }
+  .history-head { display: flex; align-items: center; gap: 8px; cursor: pointer; margin-bottom: 14px; }
+  .history-wrap { position: relative; padding-left: 20px; }
+  .history-line { position: absolute; left: 5px; top: 6px; bottom: 6px; width: 2px; background: #E3DFD3; }
+  .history-item { position: relative; margin-bottom: 12px; }
+  .history-dot { position: absolute; left: -20px; top: 6px; width: 10px; height: 10px; border-radius: 50%; background: #2E4057; border: 2px solid #F7F5F0; }
+  .history-card { background: #FFFFFF; border: 1px solid #E3DFD3; border-radius: 8px; padding: 10px 14px; }
+  .history-summary { display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+  .history-tags { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .h-block { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: #8A8578; }
+  .h-author { font-size: 13px; font-weight: 500; }
+  .h-time { font-size: 12px; color: #8A8578; }
+  .h-badge { font-size: 11px; padding: 1px 7px; border-radius: 8px; }
+  .h-note { font-size: 12px; color: #5A5648; font-style: italic; }
+  .diff-box { white-space: pre-wrap; word-break: break-word; font-family: 'Courier New', Courier, monospace; font-size: 12pt; line-height: 1.6; margin: 10px 0 0; padding: 12px 14px; background: #FBFAF7; border: 1px solid #E3DFD3; border-radius: 6px; }
+  .diff-del { background: #F6E3E0; color: #8C332A; text-decoration: line-through; }
+  .diff-add { background: #E1EFE3; color: #255C36; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-row">
+    <h2>GENE SABALA</h2>
+    <span id="status" class="status">Connecting...</span>
+  </div>
+  <p class="sub">The section below is the final document, every entry gets added onto this document.
+    This is just a way to digitalize rough drafts and ideas without having to make a google doc or spam a chat with different versions.
+  </p>
 
+  <div class="name-field">
+    <label class="label">Name: </label>
+    <input class="input" id="authorInput">
+  </div>
+
+  <div id="errorMsg" class="error hidden"></div>
+  <div id="saveMsg" class="saved hidden">Saved and Recorded</div>
+
+  <div class="main-file" id="mainFile"></div>
+
+  <button class="btn btn-primary" id="showAddBtn">Add a new section</button>
+  <div class="add-box hidden" id="addBox">
+    <textarea class="textarea" id="addText" placeholder="Write the new section: " style="margin-bottom:8px"></textarea>
+    <input class="input" id="addNote" placeholder="Note for this addition: " style="margin-bottom:8px">
+    <div class="row-gap">
+      <button class="btn btn-primary" id="submitAddBtn">Add to script</button>
+      <button class="btn" id="cancelAddBtn">Cancel</button>
+    </div>
+  </div>
+
+  <div style="border-top:1px solid #E3DFD3; padding-top:16px;">
+    <div class="history-head" id="historyToggle">
+      <h3 id="historyTitle">Full trace</h3>
+    </div>
+    <div id="historyBody" class="history-wrap"></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBjoGsBAEQwtTixsbzEwo-gtLIx0LpCcPs",
+  authDomain: "gene-sabala-docu.firebaseapp.com",
+  projectId: "gene-sabala-docu",
+  storageBucket: "gene-sabala-docu.firebasestorage.app",
+  messagingSenderId: "847172373903",
+  appId: "1:847172373903:web:7a13a6a4d542d0de668ffa",
+  measurementId: "G-N6SDPL9CDH"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const docRef = doc(db, "script", "main");
+
+const AUTHOR_COLORS = [
+  { border: "#4A7FB5", bg: "#E9F1FA", text: "#2C5987" },
+  { border: "#7D5A9E", bg: "#F1EBF6", text: "#5B3F79" },
+  { border: "#3F7D4F", bg: "#E8F3EA", text: "#2C5A38" },
+  { border: "#B5843F", bg: "#F8F0E3", text: "#8A611F" },
+  { border: "#A65C6B", bg: "#F5E9EB", text: "#7C3F4A" },
+  { border: "#4A8C8C", bg: "#E7F3F3", text: "#316363" },
+];
+function colorFor(name) {
+  let h = 0;
+  for (let i = 0; i < name.length; i++) h = (h * 31 + name.charCodeAt(i)) >>> 0;
+  return AUTHOR_COLORS[h % AUTHOR_COLORS.length];
+}
+
+function tokenize(text) { return text.split(/(\s+)/).filter(t => t.length > 0); }
+
+function diffTokens(oldText, newText) {
+  const a = tokenize(oldText || ""), b = tokenize(newText || "");
+  if (a.length * b.length > 6000 * 6000) return { tooLarge: true, ops: [] };
+  const n = a.length, m = b.length;
+  const dp = new Array(n + 1);
+  for (let i = 0; i <= n; i++) dp[i] = new Int32Array(m + 1);
+  for (let i = n - 1; i >= 0; i--)
+    for (let j = m - 1; j >= 0; j--)
+      dp[i][j] = a[i] === b[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+  const ops = [];
+  let i = 0, j = 0;
+  const push = (type, text) => {
+    const last = ops[ops.length - 1];
+    if (last && last.type === type) last.text += text; else ops.push({ type, text });
+  };
+  while (i < n && j < m) {
+    if (a[i] === b[j]) { push("equal", a[i]); i++; j++; }
+    else if (dp[i + 1][j] >= dp[i][j + 1]) { push("del", a[i]); i++; }
+    else { push("add", b[j]); j++; }
+  }
+  while (i < n) { push("del", a[i]); i++; }
+  while (j < m) { push("add", b[j]); j++; }
+  return { tooLarge: false, ops };
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function diffHtml(prevText, newText) {
+  const { tooLarge, ops } = diffTokens(prevText, newText);
+  if (tooLarge) return `<p class="empty-msg">Change too large to render inline.</p>`;
+  if (ops.length === 0) return `<p class="empty-msg">No changes.</p>`;
+  const html = ops.map(op => {
+    const t = escapeHtml(op.text);
+    if (op.type === "equal") return t;
+    if (op.type === "del") return `<span class="diff-del">${t}</span>`;
+    return `<span class="diff-add">${t}</span>`;
+  }).join("");
+  return `<div class="diff-box">${html}</div>`;
+}
+
+function timeAgo(ts) {
+  const diff = Math.max(0, Date.now() - ts);
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}h ago`;
+  const days = Math.floor(hrs / 24);
+  if (days < 30) return `${days}d ago`;
+  return new Date(ts).toLocaleDateString();
+}
+
+let docData = { blocks: [] };
+let editingId = null;
+let historyOpen = true;
+const expandedHistory = {};
+
+const authorInput = document.getElementById("authorInput");
+const statusEl = document.getElementById("status");
+const errorMsg = document.getElementById("errorMsg");
+const savedMsg = document.getElementById("saveMsg");
+
+authorInput.value = localStorage.getItem("scriptTraceAuthor") || "";
+authorInput.addEventListener("blur", () => {
+  if (authorInput.value.trim()) localStorage.setItem("scriptTraceAuthor", authorInput.value.trim());
+});
+
+function showError(msg) {
+  errorMsg.textContent = msg;
+  errorMsg.classList.remove("hidden");
+  savedMsg.classList.add("hidden");
+}
+function clearError() { errorMsg.classList.add("hidden"); }
+function flashSaved() {
+  savedMsg.classList.remove("hidden");
+  setTimeout(() => savedMsg.classList.add("hidden"), 1800);
+}
+
+async function saveDoc(updated) {
+  await setDoc(docRef, updated);
+  flashSaved();
+}
+
+document.getElementById("showAddBtn").addEventListener("click", () => {
+  document.getElementById("addBox").classList.remove("hidden");
+  document.getElementById("showAddBtn").classList.add("hidden");
+  document.getElementById("addText").focus();
+});
+document.getElementById("cancelAddBtn").addEventListener("click", () => {
+  document.getElementById("addBox").classList.add("hidden");
+  document.getElementById("showAddBtn").classList.remove("hidden");
+  document.getElementById("addText").value = "";
+  document.getElementById("addNote").value = "";
+});
+
+document.getElementById("submitAddBtn").addEventListener("click", async () => {
+  const author = authorInput.value.trim();
+  const text = document.getElementById("addText").value;
+  const note = document.getElementById("addNote").value.trim();
+  if (!author) { showError("Add your name so this addition can be traced back to you."); return; }
+  if (!text.trim()) { showError("Write something to add before submitting."); return; }
+  clearError();
+  try {
+    const snap = await getDoc(docRef);
+    const latest = snap.exists() ? snap.data() : { blocks: [] };
+    const block = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      createdBy: author,
+      createdAt: Date.now(),
+      revisions: [{ author, note, timestamp: Date.now(), text }]
+    };
+    await saveDoc({ blocks: [...(latest.blocks || []), block] });
+    document.getElementById("addText").value = "";
+    document.getElementById("addNote").value = "";
+    document.getElementById("addBox").classList.add("hidden");
+    document.getElementById("showAddBtn").classList.remove("hidden");
+  } catch (e) {
+    showError("Couldn't save that addition. Check your connection and try again.");
+  }
+});
+
+document.getElementById("historyToggle").addEventListener("click", () => {
+  historyOpen = !historyOpen;
+  render();
+});
+
+function startEdit(blockId) {
+  editingId = blockId;
+  clearError();
+  render();
+}
+function cancelEdit() {
+  editingId = null;
+  render();
+}
+async function submitEdit(blockId) {
+  const author = authorInput.value.trim();
+  if (!author) { showError("Add your name so this revision can be traced back to you."); return; }
+  const textarea = document.getElementById(`editText-${blockId}`);
+  const noteInput = document.getElementById(`editNote-${blockId}`);
+  const newText = textarea.value;
+  const note = noteInput.value.trim();
+  clearError();
+  try {
+    const snap = await getDoc(docRef);
+    const latest = snap.exists() ? snap.data() : { blocks: [] };
+    const updatedBlocks = (latest.blocks || []).map(b => {
+      if (b.id !== blockId) return b;
+      const currentText = b.revisions[b.revisions.length - 1].text;
+      if (currentText === newText) return b;
+      return { ...b, revisions: [...b.revisions, { author, note, timestamp: Date.now(), text: newText }] };
+    });
+    await saveDoc({ blocks: updatedBlocks });
+    editingId = null;
+  } catch (e) {
+    showError("Couldn't save that revision. Check your connection and try again.");
+  }
+}
+
+function toggleHistory(key) {
+  expandedHistory[key] = !expandedHistory[key];
+  render();
+}
+
+window.__script = { startEdit, cancelEdit, submitEdit, toggleHistory };
+
+function render() {
+  const blocks = docData.blocks || [];
+  const mainFile = document.getElementById("mainFile");
+
+  if (blocks.length === 0) {
+    mainFile.innerHTML = `<p class="empty-msg">The main file is empty. Add the first section below.</p>`;
+  } else {
+    mainFile.innerHTML = blocks.map((block, idx) => {
+      const current = block.revisions[block.revisions.length - 1];
+      const color = colorFor(block.createdBy);
+      const isEditing = editingId === block.id;
+      const editedTag = block.revisions.length > 1 ? ` &middot; edited by ${escapeHtml(current.author)}` : "";
+      if (!isEditing) {
+        return `
+          <div class="block">
+            <div class="block-meta">
+              <span class="section-tag">Section ${idx + 1}</span>
+              <span class="author-chip" style="background:${color.bg};color:${color.text}">${escapeHtml(block.createdBy)}${editedTag}</span>
+              <span class="time-tag">${timeAgo(current.timestamp)}</span>
+              <button class="btn edit-btn" onclick="window.__script.startEdit('${block.id}')">Edit</button>
+            </div>
+            <pre class="block-text" style="border-left:3px solid ${color.border}">${escapeHtml(current.text)}</pre>
+          </div>`;
+      }
+      return `
+        <div class="block">
+          <div class="block-meta">
+            <span class="section-tag">Section ${idx + 1}</span>
+            <span class="author-chip" style="background:${color.bg};color:${color.text}">${escapeHtml(block.createdBy)}${editedTag}</span>
+          </div>
+          <textarea class="textarea" id="editText-${block.id}" style="margin-bottom:6px">${escapeHtml(current.text)}</textarea>
+          <input class="input" id="editNote-${block.id}" placeholder="Note for this revision" style="margin-bottom:6px">
+          <div class="row-gap">
+            <button class="btn btn-primary" onclick="window.__script.submitEdit('${block.id}')">Save revision</button>
+            <button class="btn" onclick="window.__script.cancelEdit()">Cancel</button>
+          </div>
+        </div>`;
+    }).join("");
+  }
+
+  const flat = [];
+  blocks.forEach((b, blockIdx) => {
+    b.revisions.forEach((rev, revIdx) => {
+      const prevText = revIdx === 0 ? "" : b.revisions[revIdx - 1].text;
+      flat.push({ key: `${b.id}-${revIdx}`, blockLabel: `Section ${blockIdx + 1}`, author: rev.author, note: rev.note, timestamp: rev.timestamp, text: rev.text, prevText, isNew: revIdx === 0 });
+    });
+  });
+  flat.sort((x, y) => y.timestamp - x.timestamp);
+
+  document.getElementById("historyTitle").textContent = `Full trace${flat.length ? ` (${flat.length})` : ""}`;
+  const historyBody = document.getElementById("historyBody");
+  if (!historyOpen) { historyBody.innerHTML = ""; }
+  else if (flat.length === 0) {
+    historyBody.innerHTML = `<p class="empty-msg">Nothing recorded yet.</p>`;
+  } else {
+    historyBody.innerHTML = `<div class="history-line"></div>` + flat.map(h => {
+      const isOpen = !!expandedHistory[h.key];
+      return `
+        <div class="history-item">
+          <div class="history-dot"></div>
+          <div class="history-card">
+            <div class="history-summary" onclick="window.__script.toggleHistory('${h.key}')">
+              <div class="history-tags">
+                <span class="h-block">${h.blockLabel}</span>
+                <span class="h-author">${escapeHtml(h.author)}</span>
+                <span class="h-time">${timeAgo(h.timestamp)}</span>
+                <span class="h-badge" style="background:${h.isNew ? "#E1EFE3" : "#EFEAE0"};color:${h.isNew ? "#255C36" : "#5A5648"}">${h.isNew ? "new section" : "edit"}</span>
+                ${h.note ? `<span class="h-note">&ldquo;${escapeHtml(h.note)}&rdquo;</span>` : ""}
+              </div>
+            </div>
+            ${isOpen ? diffHtml(h.prevText, h.text) : ""}
+          </div>
+        </div>`;
+    }).join("");
+  }
+}
+
+onSnapshot(docRef, (snap) => {
+  docData = snap.exists() ? snap.data() : { blocks: [] };
+  statusEl.textContent = "Live";
+  statusEl.classList.add("live");
+  render();
+}, (err) => {
+  statusEl.textContent = "Connection error";
+  showError("Couldn't connect to the shared script. Check the Firebase config at the top of this file.");
+});
+
+render();
+</script>
+</body>
+</html>
