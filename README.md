@@ -1,2 +1,3 @@
 # shijwav.com
-for my personal website
+
+currently being used for the organazition of the writting for GENE SABALA
